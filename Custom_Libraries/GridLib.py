@@ -12,15 +12,16 @@ __status__ = "Prototype"
 import geopy.distance
 import pandas as pd
 import numpy as np
+from numba import jit
 import gc
 
 class BaseGrid:
     """
     BaseGrid : Class to setup a geographically aware grid
     """
-    EAST_BOUND = -73.650
-    SOUTH_BOUND = 40.500
-    WEST_BOUND = -74.250
+    EAST_BOUND = -73.750
+    SOUTH_BOUND = 40.550
+    WEST_BOUND = -74.150
     NORTH_BOUND = 40.900
 
     LON_CENTER = -73.95
@@ -34,9 +35,9 @@ class BaseGrid:
 
     def __init__(self,\
                  resolution = 33,\
-                 EAST_BOUND = -73.650,\
-                 SOUTH_BOUND = 40.500,\
-                 WEST_BOUND = -74.250,\
+                 EAST_BOUND = -73.750,\
+                 SOUTH_BOUND = 40.550,\
+                 WEST_BOUND = -74.150,\
                  NORTH_BOUND = 40.900):
 
         # Cleanup everything
@@ -98,6 +99,7 @@ class BaseGrid:
         gc.collect()
         return None
 
+    @jit
     def griddify(self,lon,lat):
         """
         Returns a single grid index given a tuple of longitude and latitude
