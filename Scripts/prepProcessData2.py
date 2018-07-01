@@ -1,7 +1,7 @@
 import pandas as pd
 import gc
 
-for i in [2015,2016]:
+for i in [2014]:
     for j in range(1,13):
         print(i,j)
         PATH = "../Raw_Data/yellow_tripdata_{:4d}-{:02d}.csv.gz".format(i,j)
@@ -11,11 +11,9 @@ for i in [2015,2016]:
 
         tmp.rename(columns=lambda x: x.strip().lower().replace('lpep_','').replace('tpep_',''), inplace=True)
 
-        print([tmp.columns])
-
         tmp["hour"] = pd.to_datetime(tmp["pickup_datetime"],\
                                      format="%Y/%m/%d %H:%M:%S",\
-                                     errors='ignore',\
+                                     errors='coerce',\
                                      box=True).dt.hour
 
         tmp2 = tmp.loc[((tmp["hour"] >= 0) &\
@@ -45,12 +43,12 @@ for i in [2015,2016]:
                           engine='c',\
                           error_bad_lines=False)
 
+        tmp4.rename(columns=lambda x: x.strip().lower().replace('lpep_','').replace('tpep_',''), inplace=True)
+
         tmp4["hour"] = pd.to_datetime(tmp4["pickup_datetime"],\
                                      format="%Y/%m/%d %H:%M:%S",\
-                                     errors='ignore',\
+                                     errors='coerce',\
                                      box=True).dt.hour
-
-        tmp4.rename(columns=lambda x: x.strip().lower().replace('lpep_','').replace('tpep_',''), inplace=True)
 
         tmp5 = tmp4.loc[((tmp4["hour"] >= 0) &\
                         (tmp4["hour"] < 5)) |\

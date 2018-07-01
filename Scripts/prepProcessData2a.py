@@ -1,7 +1,7 @@
 import pandas as pd
 import gc
 
-for i in [2011,2012]:
+for i in [2014]:
     for j in range(1,13):
         print(i,j)
         PATH = "../Raw_Data/yellow_tripdata_{:4d}-{:02d}.csv.gz".format(i,j)

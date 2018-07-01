@@ -6,16 +6,19 @@ import matplotlib.pyplot as plt
 
 ########################################
 
-MIN_SHOW = 10
+MIN_SHOW = 0
+MIN_SHOW_CHART = 120
 
 ########################################
 
+import pandas as pd
 import numpy as np
-tmpData = np.load('result.npy')[:2500,:]
-averagePickups2 = np.nanmean(tmpData,axis=0)
+tmpData = pd.read_hdf('result.hdf','table')
+averagePickups2 = tmpData.mean(axis=0)
 
 width, height = 310,180
-nycCenLat,nycCenLon = 40.729861,-73.988
+nycCenLat,nycCenLon = 40.733274040,-73.992807073
+# 40.729861,-73.988
 NYC = (nycCenLat,nycCenLon)
 f = folium.Figure()
 f.html.add_child(\
@@ -25,6 +28,10 @@ map_of_nyc = folium.Map(location=NYC,\
                         zoom_start=15,\
                         max_zoom=18,\
                         tiles='Stamen Toner')
+
+TDI_marker = folium.Marker([nycCenLat,nycCenLon],\
+                           popup='TDI NYC',\
+                           icon=folium.Icon(icon_color='orange')).add_to(map_of_nyc)
 
 import pandas as pd
 topPlaces = pd.read_csv('topPlaces5.csv')
@@ -76,10 +83,6 @@ table#t01 tr:nth-child(even) {{
     <td>{}</td>
   </tr>
   <tr>
-    <td>Avg. Num Patrons</td>
-    <td>{}</td>
-  </tr>
-  <tr>
     <td>Avg. Google review</td>
     <td>{}</td>
   </tr>
@@ -98,7 +101,7 @@ def get_colors(inp, colormap, vmin=None, vmax=None):
     return colormap(norm(inp))
 
 colorArray = []
-B = get_colors(averagePickups,plt.cm.jet,vmin=MIN_SHOW)
+B = get_colors(averagePickups,plt.cm.jet,vmin=MIN_SHOW_CHART)
 A = B*255
 A = A.astype(int)
 
@@ -113,9 +116,9 @@ for i,j,k,l in zip(lats,\
                    averagePickups,\
                    colorArray):
 
-    if(k >= MIN_SHOW):
+    if(k >= MIN_SHOW_CHART):
         folium.Circle(location=[i,j],\
-                      radius=5*int(np.log10(k+1)),\
+                      radius=10*int(np.log10(k+1)),\
                       color=l,\
                       fill=True).add_to(map_of_nyc)
 
@@ -133,44 +136,57 @@ for lat,lon,dba,rating,priceLevel,pickup,latG,lonG in zip(lats,\
                                                           latGrid,\
                                                           lonGrid):
 
-    print(dba)
+    if(pickup > MIN_SHOW): 
+        print(dba)
 
-    if np.isnan(priceLevel):
-        priceLevel = '-'
-    else:
-        priceLevel = '$'*int(priceLevel)
+        if np.isnan(priceLevel):
+            priceLevel = '-'
+        else:
+            priceLevel = '$'*int(priceLevel)
+            
+        points.append((lat,lon))
+        iframe = IFrame(table(dba,\
+                              np.around(pickup),\
+                              rating,\
+                              priceLevel),
+                        width=width,\
+                        height=height)
     
-    points.append((lat,lon))
-    iframe = IFrame(table(dba,\
-                          np.around(pickup),\
-                          np.around(0),\
-                          rating,\
-                          priceLevel),
-                    width=width,\
-                    height=height)
-    
-    popups.append(iframe)
+        popups.append(iframe)
     
 cluster = MarkerCluster(locations=points,\
                          popups=popups).add_to(map_of_nyc)
-cluster.layer_name = "Late night venues"
+
+cluster.layer_name = "Bars with at least {:d} pickups".format(MIN_SHOW)
 
 import vincent, json
 import numpy as np
 
-
-
 tmpArray = []
-for i,j in zip(range(len(tmpData[0,:])),averagePickups):
-    if(j > 100):
-        tmpArray.append(vincent.Line(tmpData[0,i]))
-    else:
-        tmpArray.append(None)
+points2 = []
+#for i,j,p in zip(dbas,averagePickups,points):
+#
+#    if(j > MIN_SHOW_CHART):
+#        points2.append(p)
+#
+#        tmpFrame = pd.DataFrame({
+#            'index' : tmpData.index,\
+#            'values' : tmpData[i].values()\
+#                             })
 
-cluster2 = MarkerCluster(locations=points,\
-                         popups=tmpArray).add_to(map_of_nyc)
-
+#        lineChart = vincent.Line(tmpData[i].values(),
+#                                 iter_idx='index',
+#                                 width=600,
+#                                 height=300)
+#        lineChart.axis_titles(x='Dates', y='Average number of pickups')
+#        popup = folium.Popup(max_width=800)        
+#        folium.Vega(lineChart, height=350, width=650).add_to(popup)
+#        tmpArray.append(popup)
+#
+#cluster2 = MarkerCluster(locations=points2,\
+#                         popups=tmpArray).add_to(map_of_nyc)
+#cluster2.layer_name = "Locations with more than {:d} daily pickups".format(MIN_SHOW_CHART)
 
 map_of_nyc.add_child(folium.LayerControl())
-map_of_nyc.save('test3a.html')
+map_of_nyc.save('map.html')
 
