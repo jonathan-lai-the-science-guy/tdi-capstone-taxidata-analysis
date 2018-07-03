@@ -2,8 +2,10 @@ import folium # MIT license
 from folium import plugins, IFrame
 from folium.map import *
 from folium.plugins import *
-import matplotlib.pyplot as plt
-
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt,mpld3
+import seaborn as sns
 ########################################
 
 MIN_SHOW = 5
@@ -11,6 +13,8 @@ MIN_SHOW_CHART = 120
 
 ########################################
 
+
+########################################
 import pandas as pd
 import numpy as np
 tmpData = pd.read_hdf('result.hdf','table')
@@ -22,7 +26,7 @@ histData = pd.read_hdf('reducedHistResult.hdf','table')
 
 width, height = 310,180
 nycCenLat,nycCenLon = 40.733274040,-73.992807073
-# 40.729861,-73.988
+
 NYC = (nycCenLat,nycCenLon)
 f = folium.Figure()
 f.html.add_child(\
@@ -37,6 +41,7 @@ TDI_marker = folium.Marker([nycCenLat,nycCenLon],\
                            popup='TDI NYC',\
                            icon=folium.Icon(icon_color='orange')).add_to(map_of_nyc)
 
+########################################
 import pandas as pd
 topPlaces = pd.read_csv('topPlaces5.csv').drop_duplicates()
 topPlaces['averagePickups'] = topPlaces["Doing Business As (DBA)"].map(tmpDict)
@@ -52,8 +57,7 @@ ubers_to_patrons = np.load('../Data/uber_to_patrons.npy')
 ########################################
 import vincent, json
 import numpy as np
-
-
+import matplotlib.pyplot as plt, mpld3
 
 points2 = []
 tmpArray = []
@@ -63,22 +67,20 @@ for i,j,lat,lon in zip(dbas,averagePickups,lats,lons):
         print(lat,lon)
         points2.append((lat,lon))
 
-        tmpDF = pd.DataFrame({ "dates" : tmpData.index, "pickups" : tmpData[i] })
-        tmpDF.index = tmpDF.index.values.astype('M8[D]')
+#        tmpDF = pd.DataFrame({ "dates" : tmpData.index, "pickups" : tmpData[i] })
+#        tmpDF.index = tmpDF.index.values.astype('M8[D]')
 
-        lineChart = vincent.Line(tmpDF,
-                                 width=500,
-                                 height=200)
-        lineChart.axis_titles(x='Dates', y='Average number of pickups')
+        fig = plt.figure(figsize=(3,5))
+        ax = fig.add_subplot(2,1,1)
+#add_subplot(1,1,1)
+        ax.plot(tmpData[i])
+#tmpData[i][::7])
+        ax.set_xlabel('Date')
+        ax.set_ylabel('Average number of pickups')
+        popup = IFrame(html=mpld3.fig_to_html(fig,template_type="simple"), width=600, height=450)
+        plt.tight_layout()
+        plt.close(fig)
 
-        barChart = vincent.Bar(histData[i],
-                                width=500,
-                                height=200)
-        barChart.axis_titles(x='Hours', y='Average number of pickups')
-
-        popup = folium.Popup(max_width=800)        
-        folium.Vega(lineChart, height=300, width=700).add_to(popup)
-        folium.Vega(barChart, height=300, width=700).add_to(popup)
         tmpArray.append(popup)
 
 cluster2 = MarkerCluster(locations=points2,\
@@ -86,12 +88,6 @@ cluster2 = MarkerCluster(locations=points2,\
 cluster2.layer_name = "Locations with more than {:d} daily pickups".format(MIN_SHOW_CHART)
 
 ########################################
-
-#nb = np.load('../Data/normalizedBar.npy').tolist()
-#HeatMap(nb).add_to(map_of_nyc)
-########################################
-
-
 map_of_nyc.add_child(folium.LayerControl())
 map_of_nyc.save('map.html')
 

@@ -21,7 +21,7 @@ import GridLib as gl
 bg = gl.BaseGrid(resolution=33)
 
 xeLiquorOrig,yeLiquorOrig = bg.getGridIndex()
-data = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig)))
+data = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig))).astype(int)
 
 ########################################
 # Read data
@@ -62,7 +62,7 @@ t0 = t1
 print('Finished loading pandas')
 for year in range(2009,2016):
 
-    for month in range(1,12):
+    for month in range(1,13):
         print('Loading hdf file')
         rides = pd.read_hdf('../Data/tripdata_{:d}-{:02d}-grid.hdf'.format(year,month),'table')
         rides.dropna(inplace=True)
@@ -83,7 +83,7 @@ for year in range(2009,2016):
                 if(not np.isnan(n)):
                     numRides = n
 
-                data[int(l),int(m)] += numRides
+                data[int(l),int(m)] += int(numRides)
     
 
             ########################################
@@ -105,6 +105,7 @@ for year in range(2009,2016):
             results.append(pd.DataFrame(tmpDict,columns=bars['Doing Business As (DBA)'],index=[k]))
 
             day += 1
+            np.save('Hist/hist-{:d}-{:02d}-{:d}.npy'.format(year,month,k),data)
             data *= 0
         
         print("\tDays analyzed:",day)
@@ -138,7 +139,11 @@ for year in [2016]:
         for k in datetimes:
             tmp = rides.loc[rides['date'] == k]
             for l,m in zip(tmp['pGridLat'],tmp['pGridLon']):
-                data[int(l),int(m)] += 1
+                numRides = 1
+                if(not np.isnan(n)):
+                    numRides = n
+
+                data[int(l),int(m)] += int(numRides)
     
             counter = 0
             tmpDict = { 'Date' : k }
@@ -154,6 +159,7 @@ for year in [2016]:
             results.append(pd.DataFrame(tmpDict,columns=bars['Doing Business As (DBA)'],index=[k]))
 
             day += 1
+            np.save('Hist/hist-{:d}-{:02d}-{:d}.npy'.format(year,month,k),data)
             data *= 0
         
         print("\tDays analyzed:",day)
