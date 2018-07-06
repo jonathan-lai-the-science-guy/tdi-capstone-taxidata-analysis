@@ -131,7 +131,7 @@ for year in [2016]:
                                                 tmp['dGridLon'],\
                                                 tmp['passenger_count']):
         
-                if((pLat,pLon) in barsDict):
+                if((pLat,pLon) in barsDict and (dLat,dLon) not in barsDict):
                     numRides = 1
                     if(not np.isnan(numP)):
                         numRides = numP

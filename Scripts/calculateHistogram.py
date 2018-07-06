@@ -18,10 +18,10 @@ import sys
 sys.path.append('../Custom_Libraries')
 
 import GridLib as gl
-bg = gl.BaseGrid(resolution=33)
+bg = gl.BaseGrid(resolution=16)
 
 xeLiquorOrig,yeLiquorOrig = bg.getGridIndex()
-data = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig))).astype(int)
+data = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig))).astype(float)
 
 ########################################
 # Read data
@@ -51,6 +51,9 @@ bars = pd.read_csv('topPlaces5.csv',\
                           'price_level' : 'float',\
                           'weekday' : 'str'})
 
+bars['LatGrid'] = pd.cut(bars['Latitude'],xeLiquorOrig,labels=False)
+bars['LonGrid'] = pd.cut(bars['Longitude'],yeLiquorOrig,labels=False)
+
 import gc
 day = 0
 #result = np.zeros((365*8,(len(bars))),dtype='float32')
@@ -66,6 +69,8 @@ for year in range(2009,2016):
         print('Loading hdf file')
         rides = pd.read_hdf('../Data/tripdata_{:d}-{:02d}-grid.hdf'.format(year,month),'table')
         rides.dropna(inplace=True)
+        rides['pGridLat'] = pd.cut(rides['latitude'],xeLiquorOrig,labels=False)
+        rides['pGridLon'] = pd.cut(rides['longitude'],yeLiquorOrig,labels=False)
         print("There are {:d} number of NYC rides".format(len(rides)))
         rides['date'] = pd.DatetimeIndex(rides['pickup_datetime']).hour
         datetimes = rides['date'].unique()
@@ -124,6 +129,8 @@ for year in [2016]:
         print('Loading hdf file')
         rides = pd.read_hdf('../Data/tripdata_{:d}-{:02d}-grid.hdf'.format(year,month),'table')
         rides.dropna(inplace=True)
+        rides['pGridLat'] = pd.cut(rides['latitude'],xeLiquorOrig,labels=False)
+        rides['pGridLon'] = pd.cut(rides['longitude'],yeLiquorOrig,labels=False)
         print("There are {:d} number of NYC rides".format(len(rides)))
 #        rides['date'] = pd.DatetimeIndex(rides['pickup_datetime']).normalize()
 #        datetimes = rides['date'].unique()

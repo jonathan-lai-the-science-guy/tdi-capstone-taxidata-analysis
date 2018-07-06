@@ -144,7 +144,6 @@ table#t01 tr:nth-child(even) {{
 
 ########################################
 
-
 def get_colors(inp, colormap, vmin=None, vmax=None):
     norm = plt.Normalize(vmin, vmax)
     return colormap(norm(inp))

@@ -18,7 +18,7 @@ import sys
 sys.path.append('../Custom_Libraries')
 
 import GridLib as gl
-bg = gl.BaseGrid(resolution=33)
+bg = gl.BaseGrid(resolution=15.24)
 
 xeLiquorOrig,yeLiquorOrig = bg.getGridIndex()
 data = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig)))
@@ -28,7 +28,7 @@ data = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig)))
 ########################################
 import numpy as np
 
-normalizedBar = np.load('../Data/normalizedBar.npy')
+#normalizedBar = np.load('../Data/normalizedBar.npy')
 
 ########################################
 # Read data
@@ -51,6 +51,30 @@ bars = pd.read_csv('topPlaces5.csv',\
                           'price_level' : 'float',\
                           'weekday' : 'str'})
 
+bars['LatGrid'] = pd.cut(bars['Latitude'],xeLiquorOrig,labels=False)
+bars['LonGrid'] = pd.cut(bars['Longitude'],yeLiquorOrig,labels=False)
+
+########################################
+# Calculate normalize bar code
+########################################
+print("Building bar normalization matrix")
+normalizedBar = np.zeros((len(xeLiquorOrig),len(yeLiquorOrig))).astype(int)
+for lat,lon in zip(bars['LatGrid'],bars['LonGrid']):
+    normalizedBar[lat-1,lon-1] += 1
+    normalizedBar[lat-1,lon+0] += 1
+    normalizedBar[lat-1,lon+1] += 1
+    normalizedBar[lat+0,lon-1] += 1
+    normalizedBar[lat+0,lon+0] += 1
+    normalizedBar[lat+0,lon+1] += 1
+    normalizedBar[lat+1,lon-1] += 1
+    normalizedBar[lat+1,lon+0] += 1
+    normalizedBar[lat+1,lon+1] += 1
+normalizedBar[np.where(normalizedBar == 0)] = 1
+print("Finished building bar normalization matrix")
+########################################
+# Loop over files
+########################################
+
 import gc
 day = 0
 #result = np.zeros((365*8,(len(bars))),dtype='float32')
@@ -65,6 +89,8 @@ for year in range(2009,2016):
     for month in range(1,13):
         print('Loading hdf file')
         rides = pd.read_hdf('../Data/tripdata_{:d}-{:02d}-grid.hdf'.format(year,month),'table')
+        rides['pGridLat'] = pd.cut(rides['pickup_latitude'],xeLiquorOrig,labels=False)
+        rides['pGridLon'] = pd.cut(rides['pickup_longitude'],yeLiquorOrig,labels=False)
         rides.dropna(inplace=True)
         print("There are {:d} number of NYC rides".format(len(rides)))
         rides['date'] = pd.DatetimeIndex(rides['pickup_datetime']).normalize()
@@ -122,6 +148,8 @@ for year in [2016]:
     for month in range(1,7):
         print('Loading hdf file')
         rides = pd.read_hdf('../Data/tripdata_{:d}-{:02d}-grid.hdf'.format(year,month),'table')
+        rides['pGridLat'] = pd.cut(rides['pickup_latitude'],xeLiquorOrig,labels=False)
+        rides['pGridLon'] = pd.cut(rides['pickup_longitude'],yeLiquorOrig,labels=False)
         rides.dropna(inplace=True)
         print("There are {:d} number of NYC rides".format(len(rides)))
         rides['date'] = pd.DatetimeIndex(rides['pickup_datetime']).normalize()
