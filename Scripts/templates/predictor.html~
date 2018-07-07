@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link
+       href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.16.min.css"
+       rel="stylesheet" type="text/css">
+    <link
+       href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.16.min.css"
+       rel="stylesheet" type="text/css">
+
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.16.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.16.min.js"></script>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Skeleton application demoing Heroku and Flask integration.">
+    <meta name="author" content="@gotoariel">
+    <!-- <link rel="icon" href="favicon.ico"> -->
+
+    <title>Which rides are worth a taxi ride?</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-left">
+          <h2>Enter your geolocation; hit submit; get a bar recommendation</h2>
+          <ul>
+	    <p><form method=post action="">
+		<table width="600">
+		  <tr>
+		    <th>Street number</th>
+		    <th>&nbsp</th>
+		    <th>Street Address</th>
+		    <th>&nbsp</th>
+		    <th>Zipcode</th>
+		    <th>&nbsp</th>
+		    <th>Going by yourself or with a group?</th>
+		  </tr>
+		  <tr>
+		    <th>{{ form.StreetNum }}</th>
+		    <th>&nbsp</th>
+		    <th>{{ form.StreetAddress }}</th>
+		    <th>&nbsp</th>
+		    <th>{{ form.ZipCode }}</th>
+		    <th>&nbsp</th>
+		    <th><select name=numPeopleGoing method="GET" action="/">
+			{% for npg in numPeopleGoing %}
+			<option value= "{{npg}}" SELECTED>{{npg}}</option>
+			{% endfor %}
+		    </select></th>
+		  </tr>
+		    <th><input type="submit" value="Submit"></th>
+		  </tr>
+		</table>
+	    </form></br>
+          </ul>
+	  {% if script %}
+	    {{ script | safe }}
+<!--	    {{ div | safe }} -->
+	  {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
