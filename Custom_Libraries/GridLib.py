@@ -35,6 +35,7 @@ class BaseGrid:
 
     def __init__(self,\
                  resolution = 33,\
+                 scaleFactor = -1,\
                  EAST_BOUND = -73.750,\
                  SOUTH_BOUND = 40.550,\
                  WEST_BOUND = -74.150,\
@@ -79,8 +80,10 @@ class BaseGrid:
         # 33 = ~30 m resolution ~100 ft
         # 25 = 40 m resolution
         # 20 = 50 m resolution
-        latBins = int(np.round(LAT_BOUND * latDeg2m,2) * 33)
-        lonBins = int(np.round(LON_BOUND * lonDeg2m,2) * 33)
+        if(scaleFactor == -1):
+            scaleFactor = 1000.0/resolution
+        latBins = int(np.round(LAT_BOUND * latDeg2m,2) * scaleFactor)
+        lonBins = int(np.round(LON_BOUND * lonDeg2m,2) * scaleFactor)
 
         # Compute iterable range for the space
         latRange = np.linspace(self.SOUTH_BOUND,self.NORTH_BOUND,latBins)
