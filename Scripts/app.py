@@ -13,7 +13,7 @@ import sys
 sys.path.append('/home/vagrant/Capstone/Custom_Libraries/')
 
 import GridLib as gl
-bg = gl.BaseGrid(resolution=33)
+bg = gl.BaseGrid(resolution=33,scaleFactor=33)
 
 xeLiquorOrig,yeLiquorOrig = bg.getGridIndex()
 
@@ -64,6 +64,10 @@ outputName = ["Name","Address","Price","Rating"]
 #var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 #}""".format(x,y))
 
+def prettifyName(Name):
+    return(Name[:30].strip())
+
+
 def prettifyAddress(addressStr):
     addressStr = " " + addressStr + " "
     addressStr = addressStr.replace(' STREET ',' ST ')
@@ -74,20 +78,23 @@ def prettifyAddress(addressStr):
 
 
 import geopy.distance
-def getBarOutput(indx,lat,lon):
+def getBarOutput(indx,vals,lat,lon):
     output = ["<body>"]
+    output = ["<style> th {padding-right: 10px;} td {padding-right: 5px}</style>"]
     colors = ['"#ffffff"','"#444444"']
     for counter,val in enumerate(indx):
         output.append("<table bgcolor={:s}>".format(colors[counter % 2]))
         tmp = bars.loc[bars["Index"] == val]
 
         # Print out bar name
-        output.append("\t\t<th>{:d}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>".format(counter + 1))
+        output.append("\t<tr>")
+        output.append("\t\t<th>{:d}&nbsp&nbsp&nbsp</th>".format(counter + 1))
+        output.append('\t\t<th colspan="3"><i>{:1.2f}% of social taxi-rides home came from this bar</i></th>'.format(100*vals[counter]))
         output.append("\t<tr>")
         output.append("\t\t<th>&nbsp</th>")
         output.append("\t\t<th>Name</th>")
-        output.append("\t\t<th>&nbsp&nbsp&nbsp&nbsp</th>")
-        output.append("\t\t<th>{:s}</th>".format(tmp["Doing Business As (DBA)"].values[0]))
+        output.append("\t\t<th>&nbsp&nbsp</th>")
+        output.append("\t\t<td>{:s}</td>".format(prettifyName(tmp["Doing Business As (DBA)"].values[0])))
         output.append("\t</tr>")
 
         # Print out address
@@ -95,24 +102,23 @@ def getBarOutput(indx,lat,lon):
         output.append("\t<tr>")
         output.append("\t\t<th>&nbsp</th>")
         output.append("\t\t<th>Address</th>")
-        output.append("\t\t<th>&nbsp&nbsp&nbsp&nbsp</th>")
-        output.append("\t\t<th>{:s}</th>".format(address))
+        output.append("\t\t<th>&nbsp&nbsp</th>")
+        output.append("\t\t<td>{:s}</td>".format(address))
         output.append("\t</tr>")
         
         # Calculate the distance from your home to bar
         c1 = (lat,lon)
         c2 = (tmp["Latitude"].values[0],tmp["Longitude"].values[0])
         dist = geopy.distance.vincenty(c1,c2).mi
-        print(c1,c2,dist)
         output.append("\t<tr>")
         output.append("\t\t<th>&nbsp</th>")
         output.append("\t\t<th>Distance</th>")
-        output.append("\t\t<th>&nbsp&nbsp&nbsp&nbsp</th>")
+        output.append("\t\t<th>&nbsp&nbsp</th>")
         if(dist >= 0.5):
-            output.append("\t\t<th>{:1.2f} miles</th>".format(dist))
+            output.append("\t\t<td>{:1.2f} miles</td>".format(dist))
         else:
             dist = geopy.distance.vincenty(c1,c2).ft
-            output.append("\t\t<th>{:1.2f}ft</th>".format(dist))
+            output.append("\t\t<td>{:1.2f}ft</td>".format(dist))
         output.append("\t</tr>")
         
         # Print out price
@@ -121,8 +127,8 @@ def getBarOutput(indx,lat,lon):
             output.append("\t<tr>")
             output.append("\t\t<th>&nbsp</th>")
             output.append("\t\t<th>Price</th>")
-            output.append("\t\t<th>&nbsp&nbsp&nbsp&nbsp</th>")
-            output.append("\t\t<th>{:s}</th>".format('$'*price))
+            output.append("\t\t<th>&nbsp&nbsp</th>")
+            output.append("\t\t<td>{:s}</td>".format('$'*price))
             output.append("\t</tr>")
 
         # Print out review
@@ -130,9 +136,9 @@ def getBarOutput(indx,lat,lon):
         if(len(rating) > 0):
             output.append("\t<tr>")
             output.append("\t\t<th>&nbsp</th>")
-            output.append("\t\t<th>Rating</th>")
-            output.append("\t\t<th>&nbsp&nbsp&nbsp&nbsp</th>")
-            output.append("\t\t<th>{:s}\u2606</th>".format(rating))
+            output.append("\t\t<th>Avg. Google Rating</th>")
+            output.append("\t\t<th>&nbsp&nbsp</th>")
+            output.append("\t\t<td>{:s}\u2606</td>".format(rating))
             output.append("\t</tr>")
 
         output.append("</table>")
@@ -191,44 +197,30 @@ import requests
 app = Flask(__name__)
 
 class InputForm(Form):
-    StreetNum = IntegerField(default=41,validators=[validators.InputRequired])
-    StreetAddress = TextField(default="East 11st",validators=[validators.InputRequired])
-    ZipCode = IntegerField(default=10003,validators=[validators.InputRequired])
-#    latitude = DecimalField(default=40.733274040,validators=[validators.InputRequired])
-#    longitude = DecimalField(default=-73.99280703,validators=[validators.InputRequired])
-    numPeopleGoing = SelectField(u'numPeopleGoing',\
+    StreetAddress = TextField(default="41 East 11st 10003",validators=[validators.InputRequired])
+    numPeopleGoing = SelectField('Going by yourself or with a group?',\
                                  default='Single', \
-                                 choices=[('Group', 'Group'), ('Single', 'Single')])
+                                 choices=[(1,'Single'),(0,'Group')])
     
 import json
 from ediblepickle import checkpoint
 @checkpoint(work_dir='/tmp/geoLookup', refresh=False)
 def lookUpSub(inputStr):
-    tmp = inputStr.split('|')
-    streetNum = tmp[0]
-    streetAddress = tmp[1]
-    zipCode = tmp[2]
-    tmpStr = "https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber={:s}&street={:s}&zip={:s}".format(streetNum,streetAddress,zipCode)
+    tmpStr = "https://api.cityofnewyork.us/geoclient/v1/search.json?input={:s}".format(inputStr)
     tmpStr += "&app_id={:s}&app_key={:s}".format(nyc_project_id,nyc_api_key)
     tmpJSON = requests.get(tmpStr).json()
     return(tmpJSON)
 
 
-def lookUp(streetNum,streetAddress,zipCode):
-    inputStr = streetNum + '|' + streetAddress + '|' + zipCode
-    cache_path = '/tmp/geoLookup/' + inputStr
-    
-#    try:
-#        os.stat(cache_path)
-#    except:
-#        ll,mm,rr = cache_path.rpartition('/')
-#        print(ll)
-#        try:
-#            os.makedirs(ll)
-#        except:
-#            pass
-#        f= open(cache_path,"w+")
-#        f.close()
+def lookUp(inputStr):
+    cache_path = '/tmp/geoLookup/'
+    try: 
+        os.stat(cache_path)
+    except:
+        try:
+            os.makedirs(cache_path)
+        except:
+            pass
 
     strJSON = lookUpSub(inputStr) 
     return(strJSON)
@@ -242,20 +234,19 @@ def getBar():
     script = None
     requestMethod = request.method
     if (requestMethod == 'POST'):
-        # lat = float(request.form['latitude'])
-        # lon = float(request.form['longitude'])
-        streetNum = (request.form['StreetNum'])
         streetAddress = (request.form['StreetAddress']).replace(' ','+')
-        zipCode = (request.form['ZipCode'])
+        numPeopleGoing = request.form['numPeopleGoing']
         try:
-            JSON = lookUp(streetNum,streetAddress,zipCode)
-            lat,lon = decodeJSON(JSON['address'])
+            JSON = lookUp(streetAddress)
+            lat,lon = decodeJSON(JSON['results'][0]['response'])
         except:
             lat,lon = 0,0
         latGrid,lonGrid = bg.griddify(lon,lat)
-        prediction = ckr.predict([[latGrid,lonGrid,1]],method='all')
+        prediction = ckr.predict([[latGrid,lonGrid,numPeopleGoing]],method='distant')
         indx = np.argsort(prediction)[0][-1:-6:-1]
-        script = getBarOutput(indx,lat,lon)
+        total = np.nansum(prediction[0])
+        vals = (prediction[0] / total)[indx]
+        script = getBarOutput(indx,vals,lat,lon)
 
     elif (requestMethod == 'GET'):
         numPeopleGoing = ['Group','Single']

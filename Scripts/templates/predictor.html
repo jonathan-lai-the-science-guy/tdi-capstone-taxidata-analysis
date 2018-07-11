@@ -23,34 +23,27 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
   <body>
+    <style> th {padding-right: 10px;} td {padding-right: 5px}</style>
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-left">
-          <h2>Enter your geolocation; hit submit; get a bar recommendation</h2>
+	  <p><img src="http://159.89.46.139/images/Logo.png" alt="Logo" height="72" align="left" hspace="30">
+          <b>1)</b> Enter your geolocation<br/>
+	  <b>2)</b> Hit submit<br/>
+	  <b>3)</b> Get a bar recommendation<br/></p>
+	  <br/>
           <ul>
 	    <p><form method=post action="">
-		<table width="600">
+		<table width="400">
 		  <tr>
-		    <th>Street number</th>
-		    <th>&nbsp</th>
 		    <th>Street Address</th>
-		    <th>&nbsp</th>
-		    <th>Zipcode</th>
-		    <th>&nbsp</th>
-		    <th>Going by yourself or with a group?</th>
+		    <td rowspan="2">
+		      {{ form.numPeopleGoing.label }}
+		      {{ form.numPeopleGoing }}
+		    </td>
 		  </tr>
 		  <tr>
-		    <th>{{ form.StreetNum }}</th>
-		    <th>&nbsp</th>
 		    <th>{{ form.StreetAddress }}</th>
-		    <th>&nbsp</th>
-		    <th>{{ form.ZipCode }}</th>
-		    <th>&nbsp</th>
-		    <th><select name=numPeopleGoing method="GET" action="/">
-			{% for npg in numPeopleGoing %}
-			<option value= "{{npg}}" SELECTED>{{npg}}</option>
-			{% endfor %}
-		    </select></th>
 		  </tr>
 		    <th><input type="submit" value="Submit"></th>
 		  </tr>
