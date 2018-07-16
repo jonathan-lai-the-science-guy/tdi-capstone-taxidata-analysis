@@ -1,7 +1,7 @@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @
 @ Author: Jonathan Lai
-@ License: Pay ME MILLIONS OF USD before using
+@ Website: http://159.89.46.139/index.html
 @ Date: Fri Jun 22 20:16:28 UTC 2018
 @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
