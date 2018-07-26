@@ -10,6 +10,14 @@
 * 	Template Style 
 *
 * ======================================================= */
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0; }
+
 body {
   font-family: "Poppins", Arial, sans-serif;
   font-weight: 300;
@@ -61,6 +69,15 @@ h1, h2, h3, h4, h5, h6, figure {
   font-weight: 400;
   margin: 0 0 20px 0;
   line-height: 1.3; }
+
+h1.textCenter {
+    text-align: center;}
+
+h2.textCenter {
+    text-align: center;}
+
+h3.textCenter {
+    text-align: center;}
 
 ::-webkit-selection {
   color: #fff;

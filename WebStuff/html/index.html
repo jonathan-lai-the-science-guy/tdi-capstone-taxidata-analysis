@@ -1,6 +1,11 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
+	  <style>
+	  h3 {
+	  font-size: 28px !important;
+	  }</style>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Which bars are worth a taxi ride?</title>
@@ -101,6 +106,7 @@
 							    }
 							  </style>
 								<h2>Which bars are worth a <span class=taxi>taxi ride</span>?</h2>
+								<h3><a href=http://159.89.46.139/index.html><span class=taxi>http://159.89.46.139/index.html</span></a></h3>
 							</div>
 						</div>
 					</div>
@@ -124,33 +130,23 @@
 			</div>
 		</div>-->
 
-                <div class="colorlib-work-featured colorlib-bg-white">
-		        <div class="container">
-				<div class="row mobile-wrap">
-				  <div class="col-md-6 animate-box">
-				    <iframe id="ML Predictor" src="http://159.89.46.139:33507" frameborder="0" width="500" height="500"></iframe>
-				  </div>
-				  <div class="col-md-6 animate-box">
-				    <div class="desc">
-				      <h3>Which bars are worth a tax ride based on geographical address</h3>
-				      <p align="justify">Using a sophisticated KNN algorithm coupled to the decision making power found in more than 40 million NYC taxi rides, we will recommend five bars based on your geographical address.</p>
-				      <p align="justify">Going by yourself or going with a group? Not a problem! We can provide recommendations for both.</p>
-				    </div>
-				  </div>
-				</div>
-			</div>
-		</div>
+
+		<h2 class=textCenter>Powerful analytics for your business needs</h2>
 
                 <div class="colorlib-work-featured colorlib-bg-white">
 		        <div class="container">
 				<div class="row mobile-wrap">
-					<div class="col-md-5 animate-box">
-						<img src="http://159.89.46.139/images/screenShotMapBackEnd.png" alt="Map analytics" width="500" height="375"></img>
+					<div class="col-md-7 animate-box">
+					  <iframe id="theFrame" src="http://159.89.46.139/map.html" frameborder="0" width="650" height="550"></iframe>
+					  <img src="http://159.89.46.139/images/DailyNumberOfPickups.png" width="400"></img>
+<!--						<img src="http://159.89.46.139/images/screenShotMapBackEnd.png" alt="Map analytics" width="500" height="375"></img> -->
 					</div>
-					<div class="col-md-6 col-md-offset-1 animate-box">
+<!--					<div class="col-md-5 col-md-offset-1 animate-box"> -->
+					<div class="col-md-5 animate-box">
 					  <div class="desc">
-				            <h3>Powerful analytics</h3>
+				            <h3><span font-size="28px">Ground level traffic information all at your fingertips</span></h3>
 					    <p align="justify">We use late-night vehicular traffic to predict foot traffic at various late-night establishments. Business foot traffic and gross profit data are both notoriously hard to get for outsiders of the liquor distribution and supply business. Our analytics provide you with best-in-class estimates of vehicular traffic which can be used in your workflows to estimate this data and gain a commercial advantage.</p>
+					    <p align="justify">Taxi data taken from <em>"NYS TLC"</em>. Bar data taken from <em>"NYS Liquor Authority"</em> and <em>"Google Map Services"</em></p>
 					  </div>
 					</div>
 				</div>
@@ -161,30 +157,75 @@
 		        <div class="container">
 				<div class="row mobile-wrap">
 					<div class="col-md-5 animate-box">
-						<iframe id="NYC Zones" src="http://159.89.46.139/InteractiveMaps/AffluentYoungPeople.html" frameborder="0" width="500" height="400"></iframe><br>
+						<iframe id="NYC Zones" src="http://159.89.46.139/InteractiveMaps/AffluentYoungPeople.html" frameborder="0" width="500" height="500"></iframe><br>
+						<img src="http://159.89.46.139/images/TaxiDropoffsPerHour.png" width="400"></img><br>
 						<p align="justify">Snapshots of taxi rides leaving bars from 10PM to 5AM (every hour)</p>
 					</div>
 					<div class="col-md-6 col-md-offset-1 animate-box">
 					  <div class="desc">
-				            <h3>Map of where (affluent) young people live in NYC</h3>
-					    <p align="justify">Let's say you own a bar in Manhattan and are trying to reach out and tap into the young professional market. These young professionals might have high income jobs but might not have the wealth nor capital to afford the Manhattan rent. Instead, they are living in either Williamsburg or Long Island City. With our backend tools, you can identify the best times and geographical locations to focus your marketing campaign&mdash;maximizing both your market penetration and exposure.</p>
+				            <h3>Where do young (and affluent) people in NYC live?</h3>
+					    <p align="justify">Let's say you own a bar in Manhattan and are trying to reach out and tap into the young professional market. These young professionals might not have the wealth nor capital to afford the Manhattan rent and instead are living in either Williamsburg or Long Island City. And after a long night of drinking, they are probably going to hail a cab home. With our backend tools, you can identify where these cab rides are going and focus your marketing campaign on this particular segment&mdash;maximizing both your market penetration and exposure.</p>
 					  </div>
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<div class="row mobile-wrap">
+		  <div class="container">
+		    <div class="col-md-10 animate-box">
+		      <h3>What if you want to build a new bar?</h3>
+		    </div>
+		  </div>
+		</div>
+		        <div class="container">
+				<div class="row mobile-wrap">
+				    <div class="col-md-5 animate-box">
+				      <p>Num of taxi passengers vs annual rent ($100USD per SF)</p>
+				      <iframe id="Annual taxi rides vs median rent" src="http://159.89.46.139/InteractiveMaps/bestBarSpotsInNYC.html" frameborder="0" width="400" height="400"></iframe>
+					<p align="justify">Rent data taken from "Real Estate Board of New York"</p>
+				    </div>
+				    <div class="col-md-6 col-md-offset-1 animate-box">
+				      <div class="desc">
+					<p>Current NYC zoning information</p>
+				      <iframe id="NYC Zones" src="http://159.89.46.139/InteractiveMaps/NYC_Zonal_Layout.html" frameborder="0" width="400" height="400"></iframe>
+				      <br>
+					<p align="justify">Zoning data taken from <a href="https://www1.nyc.gov/site/planning/zoning/access-text.page">NYC.gov</a>
+					  <b><br>
+					    <span style="color:#395989">Commerical zones (blue)</span>, 
+					    <span style="color:#8dcd8e">residental zones (green)</span>,
+					    <br>
+					    <span style="color:#003616">parks (dark green)</span>,
+					    <span style="color:#985135">industrial zones (orange)</span>.
+					  </b>					
+					</p>
+				      </div>
+				    </div>
+				    
+				</div>
+			</div>
+		</div>
+<!--		<div class="row mobile-wrap">
+		  <div class="container">
+		    <div class="col-md-10 animate-box">
+		      <div class="desc">
+			<h3>Can we combine zoning and rental information to find the cheapest and easiest spot to setup a bar?</h3>
+		      </div>
+		    </div>
+		  </div>
+		</div> -->
                 <div class="colorlib-work-featured colorlib-bg-white">
 		        <div class="container">
 				<div class="row mobile-wrap">
 				    <div class="col-md-5 animate-box">
-				      <iframe id="Annual taxi rides vs median rent in specifically designated commerical zones" src="http://159.89.46.139/InteractiveMaps/bestSpotsInCommericalZones.html" frameborder="0" width="500" height="400"></iframe>
+				      <iframe id="Annual taxi rides vs median rent in specifically designated commerical zones" src="http://159.89.46.139/InteractiveMaps/bestSpotsInCommericalZones.html" frameborder="0" width="500" height="500"></iframe>
+				      <img src="http://159.89.46.139/images/BestZones.png" width="400"></img><br>
 				    </div>
 				    <div class="col-md-6 col-md-offset-1 animate-box">
 				      <div class="desc">
-					<h3>Annual number of taxi rides versus median rent ($USD per SF per year) in specifically designated commerical zones</h3>
-					<p align="justify">Alternatively, you might be opening up a new bar in NYC and you need the tools to identify the locations with the fastest return-on-investment (ROI).  With our data, you can find the commerical locations with the greatest vehicular traffic with the lowest median rental costs. Our data has a fine enough resolution to know that it is better to build a bar on Briggs and Broadway (by the bridge) than anywhere else in Williamsburg.  The overall increase in vehicular traffic will justify the increased rental pricing.
-					</p>
+					<h3>Number of taxi passengers versus median annual rent ($100USD per SF) only in <b>commerical zones</b></h3>
+					<p align="justify">Alternatively, you might be opening up a new bar in NYC and you need tools to find the perfect location. The <b>biggest barrier</b> to building a bar is getting a liquor license and the biggest barrier to getting a liquor license is <b>getting approval from the community board</b>. The easiest place to open a bar is probably in commerical zones (with friendly boards) with the largest return-on-investment (ROI). Our data has a fine enough resolution to know that it is better to build a bar on Briggs and Broadway (by the bridge) than anywhere else in Williamsburg.  The overall increase in vehicular traffic will justify the increased rental pricing.
+					</p><br>
 				      </div>
 				    </div>
 				    
@@ -195,7 +236,32 @@
 		<div class="row mobile-wrap">
 		  <div class="container">
 		    <div class="col-md-10 animate-box">
-		      <h2>Other featured analytics from our platform</h2>
+		      <h3 class=textCenter>User friendly recommending search service provides new high quality data streams</h3>
+		    </div>
+		  </div>
+		</div>
+
+                <div class="colorlib-work-featured colorlib-bg-white">
+		        <div class="container">
+				<div class="row mobile-wrap">
+				  <div class="col-md-7 animate-box">
+				    <iframe id="ML Predictor" src="http://159.89.46.139:33507" frameborder="0" width="600" height="500"></iframe>
+				  </div>
+				  <div class="col-md-5 animate-box">
+				    <div class="desc">
+				      <h3>Which bars are worth a tax ride based on geographical address</h3>
+				      <p align="justify">Using a sophisticated KNN regressor coupled to the decision making power found in more than 40 million NYC taxi rides, we will recommend five bars based on your geographical address.</p>
+				      <p align="justify">Going by yourself or going with a group? Not a problem! We can provide recommendations for both.</p>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row mobile-wrap">
+		  <div class="container">
+		    <div class="col-md-10 animate-box">
+		      <h3>Other featured analytics from our platform</h3>
 		    </div>
 		  </div>
 		</div>
@@ -206,19 +272,6 @@
 <!--			<div class="row animate-box">
 				<div class="featured-wrap">-->
 					<div class="owl-carousel">
-						<div class="item">
-						  <div class="row mobile-wrap">
-						    <div class="col-md-5 col-md-offset-2"> 
-<!--						    <div class="featured-entry">-->
-
-						      <iframe id="Annual taxi rides vs median rent" src="http://159.89.46.139/InteractiveMaps/bestBarSpotsInNYC.html" frameborder="0" width="500" height="400"></iframe>
-						    </div>
-						    <div class="col-md-3">
-						      <h3>What if you are willing to deal with rezoning/multi-use laws?</h3>
-						      <p align="justify">If you found the perfect industrial neighborhood for your perfect dive bar, we can also generate reasonable predictions of local vehicular traffic and retail rental pricing!</p>
-						    </div>
-						  </div>
-						</div>
 						<div class="item">
 						  <div class="row mobile-wrap">
 						    <div class="col-md-5 col-md-offset-2"> 		   
@@ -236,37 +289,18 @@
 						      <iframe id="Looking for the best bar hop?" src="http://159.89.46.139/InteractiveMaps/BestBarHop.html" frameborder="0" width="500" height="400"></iframe>
 						    </div>
 						    <div class="col-md-3">
-						      <h3>Looking for the longest bar hop?</h3>
-						      <p align="justify">Looking for the longest bar hop? Using our graph theory tools, we can identify the most popular hops between bars. If you are by the "Park" or "Avenue" in <b>Chelsea</b>, you might want to take a taxi ride up to the "Marquee" (more than <b>1400 people</b> made this trek). Or if you are at any of the bars at the corner of Greenpoint and Franklin, you might want to take a trip to the "Meatball Shop" or "Charleston" in <b>Williamsburg</b> (more than <b>200 people</b> made this trek).</p>
+						      <h3>Looking for the best bar hop?</h3>
+						      <p align="justify">Looking for the best bar hop? Using our graph theory tools, we can identify the most popular hops between bars. If you are by the "Park" or "Avenue" in <b>Chelsea</b>, you might want to take a taxi ride up to the "Marquee" (more than <b>1400 people</b> made this trek). Or if you are at any of the bars at the corner of Greenpoint and Franklin, you might want to take a trip to the "Meatball Shop" or "Charleston" in <b>Williamsburg</b> (more than <b>200 people</b> made this trek). Graph theory tools give you the edge in finding hidden business allies.</p>
 						    </div>
 						  </div>
 						</div>
-						<div class="item">
-						  <div class="row mobile-wrap">
-						    <div class="col-md-5 col-md-offset-2"> 
-						      <iframe id="NYC Zones" src="http://159.89.46.139/InteractiveMaps/NYC_Zonal_Layout.html" frameborder="0" width="500" height="400"></iframe>
-						      <br>
-						      <b>
-						      <span style="color:#395989">Commerical zones (blue)</span>, 
-						      <span style="color:#8dcd8e">residental zones (green)</span>,
-						      <br>
-						      <span style="color:#003616">parks (dark green)</span>,
-						      <span style="color:#985135">industrial zones (orange)</span>.
-						      </b>
-						    </div>
-						    <div class="col-md-3">
-						      <h3>Don't want to deal with residental community boards?</h3>
-						      <p align="justify">Finding the perfect location for a bar is difficult. Not only do you have to worry about rent and wages, but you also have to deal with neighborhoods and their boards. We provide you with up-to-date zoning information to help you anticipate any zoning or licensing issues.</p>
-						    </div>
-
-						  </div>
-						</div>
-
 					</div>
 <!--				</div>
 			</div>-->
 		  </div>
 		</div>
+
+
 
 
 <!--		<div class="colorlib-work-featured colorlib-bg-white">
